@@ -1,0 +1,31 @@
+#:include kv/coletapage.kv
+#:include kv/loginpage.kv
+#:include kv/homepage.kv
+#:include kv/camerapage.kv
+
+#:import utils kivy.utils
+
+FloatLayout:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            source:'icones/bg1.png'
+    FloatLayout:
+
+        ScreenManager:
+            pos_hint:{"right": 1, "top":1}
+            size_hint: 1, 1
+            id: screen_manager
+            LoginPage:
+                name:"loginpage"
+                id: loginpage
+            ColetaPage:
+                name:"coletapage"
+                id: coletapage
+            HomePage:
+                name:"homepage"
+                id:homepage
+            CameraPage:
+                name:"camerapage"
+                id:camerapage

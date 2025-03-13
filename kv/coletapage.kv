@@ -1,0 +1,74 @@
+<ColetaPage>:
+    FloatLayout:
+        Label:
+            id: mensagem
+            text: ''
+            bold: True
+            markup:True
+            pos_hint: {'right':0.9, 'top':0.35}
+            size_hint: 0.8 , 0.1
+        LabelButton:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'icones/botao.png' if self.state =='normal' else 'icones/botao_apertado.png'
+            on_release: app.limpar_referencia()
+            text:'Limpar'
+            pos_hint: {'right':0.75, 'top':0.28}
+            size_hint: 0.2 , 0.18
+        ImageButton:
+            source:'icones/camera.png'
+            on_release:app.btn_camera('camerapage')
+            pos_hint: {'right':0.95, 'top':0.28}
+            size_hint: 0.18 , 0.18
+
+        TextInput:
+            id: referencia
+            hint_text: 'Referencia'
+            pos_hint:{'right': 0.55,'top':0.24}
+            size_hint: 0.54 , 0.1
+            font_size:30
+            multiline: False
+            input_type:'number'
+
+        ScrollView:
+            pos_hint:{'right': 1, 'top':0.97}
+            size_hint: 1, 0.63
+            GridLayout:
+                cols: 1
+                id:lista_referencias
+                size_hint_y: None
+                spacing: 4, 4
+                height: self.minimum_height
+                row_default_height:'90dp'
+                row_force_default:True
+
+
+        GridLayout:
+            rows:1
+            pos_hint:{'right': 1,'top': 0.12}
+            size_hint: 1, 0.12
+            canvas:
+                Color:
+                    rgb:utils.get_color_from_hex('#006D7E')
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ImageButton:
+                id:btn_excluir
+                source:'icones/excluir.png'
+                on_release:app.popup_excluir()
+                disabled:True
+            ImageButton:
+                id: btn_enviar
+                source:'icones/upload.png'
+                on_release:app.enviar_coleta()
+                disabled:True
+            Label:
+                id: quantidade
+                text: 'Qnt.: [color=#000000]0[/color]'
+                bold: True
+                markup:True
+
+

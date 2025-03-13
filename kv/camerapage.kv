@@ -1,0 +1,33 @@
+<CameraPage>:
+    #:import ZBarCam kivy_garden.zbarcam.ZBarCam
+    #:import ZBarSymbol pyzbar.pyzbar.ZBarSymbol
+    FloatLayout:
+        orientation: 'vertical'
+        ZBarCam:
+            id: zbarcam
+            # optional, by default checks all types
+            code_types: ZBarSymbol.QRCODE, ZBarSymbol.EAN13
+        Label:
+            size_hint: None, None
+            size: self.texture_size[0], 50
+            text: ', '.join([str(symbol.data)for symbol in zbarcam.symbols])
+            on_text:app.incluir_item_camera(self.text)
+        GridLayout:
+            rows:1
+            pos_hint:{'right': 1,'top': 0.12}
+            size_hint: 1, 0.12
+            canvas:
+                Color:
+                    rgb:utils.get_color_from_hex('#006D7E')
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ImageButton:
+                source:'icones/voltar.png'
+                on_release:app.mudar_tela('coletapage')
+
+            Label:
+                id: quantidade
+                text: 'Qnt.: [color=#000000]0[/color]'
+                bold: True
+                markup:True

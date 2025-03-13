@@ -1,0 +1,30 @@
+<HomePage>:
+    FloatLayout:
+        Label:
+            id: mensagem
+            text: ''
+            bold: True
+            markup:True
+            pos_hint: {'right':0.9, 'top':0.35}
+            size_hint: 0.8 , 0.1
+
+
+        GridLayout:
+            rows:1
+            pos_hint:{'right': 1,'top': 0.12}
+            size_hint: 1, 0.12
+            canvas:
+                Color:
+                    rgb:utils.get_color_from_hex('#006D7E')
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ImageButton:
+                source:'icones/dowload.png'
+                on_release:app.atualizar_tabelas()
+
+            ImageButton:
+                source:'icones/salesman.png'
+                on_release:app.mudar_tela('coletapage')
+
+

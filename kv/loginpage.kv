@@ -1,0 +1,51 @@
+<LoginPage>:
+    FloatLayout:
+        canvas:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'icones/bg1.png'
+        Label:
+            text: 'LEITOR COD DE BARRAS [color=#00CFDB]BALANÇO[/color]'
+            bold: True
+            markup: True
+            pos_hint:{'right':0.9, 'top':1}
+            size_hint:0.8, 0.2
+        #orientation: "vertical"
+        Spinner:
+            background_normal: ""
+            background_color: (1, 1, 1, 0)
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'icones/botao.png' if self.state =='normal' else 'icones/botao_apertado.png'
+            id: lojas
+            text: "Escolha uma opção"
+            values: ["Opção 1", "Opção 2", "Opção 3"]
+            pos_hint: {'right':0.9, 'top':0.8}
+            size_hint: 0.8, 0.2
+            on_release: app.opcao_loja(self, self.text)
+
+        TextInput:
+            id: nome
+            hint_text: 'Seu nome'
+            pos_hint: {'right':0.9, 'top':0.55}
+            size_hint: 0.8 , 0.1
+        Label:
+            id: mensagem_login
+            text: '[color=#00CFDB]Faça seu Login[/color]'
+            bold: True
+            markup:True
+            pos_hint: {'right':0.9, 'top':0.4}
+            size_hint: 0.8 , 0.1
+        LabelButton:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'icones/botao.png' if self.state =='normal' else 'icones/botao_apertado.png'
+            on_release: app.logar()
+            text:'Entrar'
+            pos_hint: {'right':0.7, 'top':0.3}
+            size_hint: 0.4 , 0.2
