@@ -5,36 +5,33 @@
             text: ''
             bold: True
             markup:True
-            pos_hint: {'right':0.9, 'top':0.35}
+            pos_hint: {'right':0.9, 'top':0.2}
             size_hint: 0.8 , 0.1
-        LabelButton:
-            canvas.before:
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-                    source: 'icones/botao.png' if self.state =='normal' else 'icones/botao_apertado.png'
-            on_release: app.limpar_referencia()
-            text:'Limpar'
-            pos_hint: {'right':0.75, 'top':0.28}
-            size_hint: 0.2 , 0.18
-        ImageButton:
-            source:'icones/camera.png'
-            on_release:app.btn_camera('camerapage')
-            pos_hint: {'right':0.95, 'top':0.28}
-            size_hint: 0.18 , 0.18
 
         TextInput:
             id: referencia
             hint_text: 'Referencia'
-            pos_hint:{'right': 0.55,'top':0.24}
-            size_hint: 0.54 , 0.1
-            font_size:30
+            pos_hint: {"center_x": 0.50, "center_y": 0.10}
+            size_hint: None, None
+            size: 430, 50
+            font_size:sp(20)
             multiline: False
             input_type:'number'
+            on_text: if len(self.text) > 13: self.text = self.text[:13]
+        ImageButton:
+            source: 'icones/lix.png'
+            on_release: app.limpar_referencia()
+            pos_hint: {'right':0.80, 'top':0.15}
+            size_hint: 0.10 , 0.10
+        ImageButton:
+            source:'icones/cam.png'
+            on_release:app.btn_camera('camerapage')
+            pos_hint: {'right':0.97, 'top':0.15}
+            size_hint: 0.10 , 0.10
 
         ScrollView:
             pos_hint:{'right': 1, 'top':0.97}
-            size_hint: 1, 0.63
+            size_hint: 1, 0.80
             GridLayout:
                 cols: 1
                 id:lista_referencias
@@ -46,29 +43,91 @@
 
 
         GridLayout:
-            rows:1
-            pos_hint:{'right': 1,'top': 0.12}
-            size_hint: 1, 0.12
+            rows: 1
+            cols: 5  # Cada botão ocupa uma coluna
+            pos_hint: {'right': 1, 'top': 0.06}
+            size_hint: 1, 0.06
             canvas:
                 Color:
-                    rgb:utils.get_color_from_hex('#006D7E')
+                    rgb: utils.get_color_from_hex('#006D7E')
                 Rectangle:
                     size: self.size
                     pos: self.pos
-            ImageButton:
-                id:btn_excluir
-                source:'icones/excluir.png'
-                on_release:app.popup_excluir()
-                disabled:True
-            ImageButton:
-                id: btn_enviar
-                source:'icones/upload.png'
-                on_release:app.enviar_coleta()
-                disabled:True
-            Label:
-                id: quantidade
-                text: 'Qnt.: [color=#000000]0[/color]'
-                bold: True
-                markup:True
 
+            # Botão Histórico
+            GridLayout:
+                rows: 2
+                cols: 1
+                ImageButton:
+                    id: btn_historico
+                    source: 'icones/config.png'
+                    on_release: app.mudar_tela('historicopage')
+                    halign: "center"
 
+                LabelButton:
+                    text: "Histórico"
+                    bold: True
+                    font_size: 12
+                    size_hint_y: None
+                    height: 20
+                    color: 1, 1, 1, 1
+
+            # Botão Excluir
+            GridLayout:
+                rows: 2
+                cols: 1
+
+                ImageButton:
+                    id: btn_excluir
+                    source: 'icones/x_close.png'
+                    on_release: app.popup_excluir()
+                    disabled: True
+                    halign: "center"
+
+                Label:
+                    text: "Excluir"
+                    bold: True
+                    font_size: 12
+                    size_hint_y: None
+                    height: 20
+                    color: 1, 1, 1, 1
+
+            # Botão Enviar Coleta
+            GridLayout:
+                rows: 2
+                cols: 1
+
+                ImageButton:
+                    id: btn_enviar
+                    source: 'icones/upload.png'
+                    on_release: app.enviar_coleta()
+                    disabled: True
+
+                Label:
+                    text: "Enviar Coleta"
+                    bold: True
+                    font_size: 12
+                    size_hint_y: None
+                    height: 20
+                    color: 1, 1, 1, 1
+
+            # Quantidade 1
+            GridLayout:
+                rows: 2
+                cols: 1
+
+                Label:
+                    id: quantidade
+                    text: '[color=#000000]0[/color]'
+                    font_size: 37
+                    bold: True
+                    markup: True
+
+                # Quantidade 2
+                Label:
+                    text: "Quantidade"
+                    bold: True
+                    font_size: 12
+                    size_hint_y: None
+                    height: 20
+                    color: 1, 1, 1, 1

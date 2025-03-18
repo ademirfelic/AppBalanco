@@ -19,6 +19,8 @@ Window.keyboard_anim_args = {'d': 0.2, 't': 'in_out_expo'}
 Window.softinput_mode = 'below_target'
 os.environ['SSL_CERT_FILE'] = certifi.where()
 GUI = Builder.load_file('main.kv')
+Window.size = (350, 700)
+
 
 class MyApp(App):
     loja = ''
@@ -37,8 +39,9 @@ class MyApp(App):
             with open('login.txt', 'r') as arquivo:
                 dados = arquivo.read()
             self.id_usuario = dados.split('|')[0]
+            self.loja = dados.split('|')[2]
             self.atualizacao_data_tabelas = dados.split('|')[3]
-            if self.buscar_login(self.id_usuario,dados.split('|')[1],dados.split('|')[2]):
+            if self.buscar_login(self.id_usuario,dados.split('|')[1],self.loja):
                 self.mudar_tela('coletapage')
             else:
                 os.remove('login.txt')
@@ -126,7 +129,6 @@ class MyApp(App):
             homepage.ids['mensagem'].text = '[color=#FF0000]Erro: Referencia não encontrada[/color]'
 
     def incluir_item_camera(self, codigo):
-        print(self.root.ids['screen_manager'].current)
         if self.root.ids['screen_manager'].current != 'coletapage':
             homepage = self.root.ids['coletapage']
             homepage.ids['mensagem'].text = ''
@@ -157,7 +159,7 @@ class MyApp(App):
             os.remove('coleta.txt')
         except:
             pass
-        homepage.ids['quantidade'].text = 'Qnt.: [color=#000000]0[/color]'
+        homepage.ids['quantidade'].text = '[color=#000000]0[/color]'
         self.root.ids['camerapage'].ids['quantidade'].text = 'Qnt.: [color=#000000]0[/color]'
         homepage.ids['btn_excluir'].disabled = True
         self.fechar(pop)
@@ -166,7 +168,6 @@ class MyApp(App):
         coleta = ''
         homepage = self.root.ids['coletapage']
         lista_produto = homepage.ids['lista_referencias']
-        print('eviar coleta')
         try:
             for referencia in list(lista_produto.children):
                 coleta += referencia.id + ','
@@ -227,6 +228,8 @@ class MyApp(App):
                 arquivo.write(dados)
 
     def mudar_tela(self, id_tela):
+        if id_tela == 'historicopage':
+            self.listar_coletas('1',id_tela)
         self.root.ids['screen_manager'].current = id_tela
         if id_tela == 'coletapage' and self.ultima_atualizacao == None:
             link = 'https://appbalanco-27229-default-rtdb.firebaseio.com/Tabela/atualizado.json'
@@ -234,22 +237,53 @@ class MyApp(App):
             if self.ultima_atualizacao!= self.atualizacao_data_tabelas:
                 self.popup()
 
+    def listar_coletas(self,status,id_tela):
+        self.excluir_listagem(id_tela)
+        link = f'https://appbalanco-27229-default-rtdb.firebaseio.com/{self.loja}/{self.id_usuario}.json'
+        requisicao_dic = requests.get(link).json()
+        qnt_coleta = False
+        qnti = 0
+        nome = requisicao_dic['nome'].upper()
+        for dados in requisicao_dic['coletas']:
+            try:
+                id_usuario = dados
+                qnt = len(requisicao_dic['coletas'][dados]['coleta'].split(','))
+                status = requisicao_dic['coletas'][dados]['leitura']
+
+                qnti += qnt
+                qnt_coleta = True
+                self.root.ids['historicopage'].ids['notificacao'].text = ''
+                coletas = 'ola'
+                self.root.ids[id_tela].ids['lista_coleta'].add_widget(
+                        BannerColeta(codigo=coletas, nome=nome, quantidade=qnt, id_usuario=id_usuario,
+                                    status= status,id_tela=id_tela))
+            except:
+                pass
+        self.root.ids['historicopage'].ids['quantidade'].text = f'Qnt.: [color=#000000]{str(qnti)}[/color]'
+        if not qnt_coleta:
+            self.root.ids['historicopage'].ids['notificacao'].text = '[color=#FF6666]NÃO HÁ COLETAS[/color]'
+
+    def excluir_listagem(self, id_tela):
+        for item in list(self.root.ids[id_tela].ids['lista_coleta'].children):
+            self.root.ids[id_tela].ids['lista_coleta'].remove_widget(item)
+
     def limpar_referencia(self):
         self.root.ids['coletapage'].ids['referencia'].text = ''
         self.root.ids['coletapage'].ids['mensagem'].text = ''
 
     def atualizar_qnt(self, qnt):
         homepage = self.root.ids['coletapage']
-        quantidade = int(homepage.ids['quantidade'].text.replace('Qnt.: [color=#000000]', '').replace('[/color]', '')) + qnt
-        homepage.ids['quantidade'].text = f'Qnt.: [color=#000000]{quantidade}[/color]'
+        quantidade = int(homepage.ids['quantidade'].text.replace('[color=#000000]', '').replace('[/color]', '')) + qnt
+        homepage.ids['quantidade'].text = f'[color=#000000]{quantidade}[/color]'
         self.root.ids['camerapage'].ids['quantidade'].text = f'Qnt.: [color=#000000]{quantidade}[/color]'
 
     def conferir_produto(self, codigo):
         cor = descricao = preco = tamanho = ''
-        codigo_descricao = codigo[:7]
-        codigo_cor = codigo[7:10]
-        codigo_tamanho = int(codigo[10:12])-1
         try:
+            codigo_descricao = codigo[:7]
+            codigo_cor = codigo[7:10]
+            codigo_tamanho = int(codigo[10:12]) - 1
+
             if not self.tabela:
                 with open('tabela.txt', 'r') as arquivo:
                     self.tabela = arquivo.read().split('\n')

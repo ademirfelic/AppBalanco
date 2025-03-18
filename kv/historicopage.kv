@@ -1,0 +1,47 @@
+<HistoricoPage>:
+    FloatLayout:
+        canvas:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source:'icones/bg1.png'
+
+        ScrollView:
+            pos_hint:{'right': 1, 'top':0.9}
+            size_hint: 1, 1
+            GridLayout:
+                cols: 1
+                id:lista_coleta
+                size_hint_y: None
+                spacing: 2, 2
+                height: self.minimum_height
+                row_default_height:'90dp'
+                row_force_default:True
+
+        Label:
+            id:notificacao
+            text: ''
+            bold: True
+            markup: True
+            pos_hint:{'right':0.9, 'top':0.5}
+            size_hint:0.8, 0.2
+        GridLayout:
+            rows:1
+            pos_hint:{'right': 1,'top': 0.06}
+            size_hint: 1, 0.06
+            canvas:
+                Color:
+                    rgb:utils.get_color_from_hex('#006D7E')
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            ImageButton:
+                source:'icones/voltar.png'
+                on_release:app.mudar_tela('coletapage')
+            Label:
+            Label:
+            Label:
+                id: quantidade
+                text: 'Qnt.: [color=#000000]0[/color]'
+                bold: True
+                markup:True

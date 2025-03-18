@@ -14,8 +14,8 @@
             on_text:app.incluir_item_camera(self.text)
         GridLayout:
             rows:1
-            pos_hint:{'right': 1,'top': 0.12}
-            size_hint: 1, 0.12
+            pos_hint:{'right': 1,'top': 0.06}
+            size_hint: 1, 0.06
             canvas:
                 Color:
                     rgb:utils.get_color_from_hex('#006D7E')
@@ -25,7 +25,8 @@
             ImageButton:
                 source:'icones/voltar.png'
                 on_release:app.mudar_tela('coletapage')
-
+            Label:
+            Label:
             Label:
                 id: quantidade
                 text: 'Qnt.: [color=#000000]0[/color]'

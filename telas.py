@@ -11,3 +11,9 @@ class CameraPage(Screen):
 
 class ColetaPage(Screen):
     pass
+
+class HistoricoPage(Screen):
+    pass
+
+class ProdutoPage(Screen):
+    pass

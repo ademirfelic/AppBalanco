@@ -1,7 +1,3 @@
-# Decompiled with PyLingual (https://pylingual.io)
-# Internal filename: /home/ademir/PycharmProjects/appBalanco_/.buildozer/android/app/bannerProduto.py
-# Bytecode version: 3.9.0beta5 (3425)
-# Source timestamp: 2023-04-01 16:58:24 UTC (1680368304)
 
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -46,5 +42,46 @@ class BannerProduto(GridLayout):
         self.add_widget(produto)
 
     def atualiza_rec(self, *args):
+        self.rec.pos = self.pos
+        self.rec.size = self.size
+
+class BannerColeta(GridLayout):
+
+    def __init__(self,**kwargs):
+        self.rows = 1
+        super().__init__()
+        with self.canvas:
+            Color(rgb=(0,0,0,1))
+            self.rec = Rectangle(size= self.size, pos= self.pos)
+        self.bind(pos=self.atualiza_rec, size=self.atualiza_rec)
+        codigo = kwargs['codigo']
+        nome = kwargs['nome']
+        quantidade = kwargs['quantidade']
+        id_usuario = kwargs['id_usuario']
+        id_tela =  kwargs['id_tela']
+        status = kwargs['status']
+        self.id = codigo
+        coleta = FloatLayout()
+        label_nome = Label(text=f'Nome: {nome}', pos_hint={'right': 0.55, 'top': 0.95}, size_hint=(0.58, 0.33))
+        label_qnt = Label(text=f'Quantidade: {quantidade}', pos_hint={'right': 0.35, 'top': 0.60}, size_hint=(0.2 , 0.33))
+        self.id_tela_anterior = id_tela
+        app = App.get_running_app()
+        # imagem_lista = ImageButton(source='icones/list.png',
+        #                      pos_hint={"right": 0.60, "top": 0.90}, size_hint=(0.20, 0.5),
+        #                      on_release=partial(app.mudar_tela,'produtopage',codigo,id_usuario,self.id_tela_anterior))
+
+        if status != '0':
+            imagem = ImageButton(source='icones/ok.png',
+                                 pos_hint={"right": 0.80, "top": 0.90}, size_hint=(0.12, 0.5))
+            coleta.add_widget(imagem)
+
+        coleta.add_widget(label_nome)
+        coleta.add_widget(label_qnt)
+        #coleta.add_widget(imagem_lista)
+
+        self.add_widget(coleta)
+
+
+    def atualiza_rec(self,*args):
         self.rec.pos = self.pos
         self.rec.size = self.size
